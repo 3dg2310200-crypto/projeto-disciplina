@@ -1,0 +1,1262 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0e17">
+<meta name="description" content="Projeto Disciplina: treino, hidratação, alimentação, sono e hábitos.">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Projeto Disciplina</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #0a0e17;
+  --bg2: #0d121c;
+  --panel: #111827;
+  --panel2: #1a2332;
+  --panel3: #1f2a3d;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --green: #a3e635;
+  --green-dim: #65a30d;
+  --green-bg: rgba(163, 230, 53, 0.12);
+  --blue: #38bdf8;
+  --orange: #fb923c;
+  --purple: #a78bfa;
+  --line: #1e293b;
+  --line2: #334155;
+  --red: #f87171;
+  --radius: 18px;
+  --radius-sm: 14px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select { font: inherit; }
+button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 14px;
+  padding: 13px 18px;
+  font-weight: 650;
+  background: var(--green);
+  color: #0f172a;
+  transition: transform .15s, opacity .15s;
+}
+button:active { transform: scale(0.98); }
+button.secondary {
+  background: var(--panel2);
+  color: var(--text);
+  border: 1px solid var(--line2);
+}
+button.danger {
+  background: transparent;
+  border: 1px solid #7f1d1d;
+  color: #fca5a5;
+}
+button.wide { width: 100%; }
+button:disabled { opacity: .5; cursor: default; }
+
+.app {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 16px 14px 100px;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding-top: 4px;
+}
+.logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #a3e635, #65a30d);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(163,230,53,.25);
+}
+.logo svg { width: 24px; height: 24px; }
+.header-text h1 {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  line-height: 1.2;
+}
+.header-text p {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.pill {
+  margin-left: auto;
+  border: 1px solid var(--line2);
+  border-radius: 999px;
+  padding: 6px 11px;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* Screens */
+.screen { display: none; animation: fadeIn .25s ease; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* Hero */
+.hero {
+  padding: 22px 20px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #152033 0%, #0f172a 100%);
+  border: 1px solid #1e2d42;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(163,230,53,.12), transparent 70%);
+  pointer-events: none;
+}
+.eyebrow {
+  color: var(--green);
+  font-size: 10px;
+  letter-spacing: 1.6px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.hero h2 {
+  font-size: 24px;
+  line-height: 1.2;
+  margin: 8px 0 6px;
+  font-weight: 750;
+}
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.hero button { margin-top: 14px; }
+
+/* Cards & grids */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.grid.three { grid-template-columns: repeat(3, 1fr); }
+.stat {
+  text-align: center;
+  padding: 16px 10px;
+}
+.stat .icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 8px;
+  font-size: 18px;
+}
+.stat .icon-wrap.green { background: var(--green-bg); }
+.stat .icon-wrap.blue { background: rgba(56,189,248,.12); }
+.stat .icon-wrap.orange { background: rgba(251,146,60,.12); }
+.stat .icon-wrap.purple { background: rgba(167,139,250,.12); }
+.stat strong {
+  display: block;
+  font-size: 20px;
+  font-weight: 750;
+  margin-bottom: 2px;
+}
+.stat span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+h2 { font-size: 20px; font-weight: 750; margin-bottom: 4px; }
+h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.tag {
+  font-size: 12px;
+  color: var(--green);
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+/* Progress bar */
+.progress {
+  height: 8px;
+  background: var(--line2);
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 10px 0 14px;
+}
+.progress > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green-dim), var(--green));
+  border-radius: 99px;
+  transition: width .3s ease;
+}
+
+/* Circular progress */
+.circle-wrap {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  margin: 8px auto 12px;
+}
+.circle-wrap svg {
+  transform: rotate(-90deg);
+  width: 130px;
+  height: 130px;
+}
+.circle-bg { fill: none; stroke: var(--line2); stroke-width: 9; }
+.circle-fg {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 9;
+  stroke-linecap: round;
+  transition: stroke-dashoffset .4s ease;
+}
+.circle-center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.circle-center strong {
+  font-size: 22px;
+  font-weight: 800;
+  display: block;
+  line-height: 1.1;
+}
+.circle-center span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* Items / checkboxes */
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+.item:last-child { border-bottom: 0; }
+.item input[type=checkbox] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--line2);
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+  cursor: pointer;
+  transition: all .2s;
+}
+.item input[type=checkbox]:checked {
+  background: var(--green);
+  border-color: var(--green);
+}
+.item input[type=checkbox]:checked::after {
+  content: "✓";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.item .grow { flex: 1; min-width: 0; }
+.item strong { font-size: 14px; font-weight: 650; display: block; }
+.item small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+/* Exercise list special */
+.ex-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.ex-item:last-child { border-bottom: 0; }
+.ex-item .ex-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--panel2);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.ex-item .grow { flex: 1; }
+.ex-item strong { font-size: 14px; font-weight: 650; }
+.ex-item small { color: var(--muted); font-size: 12px; margin-top: 2px; display: block; }
+.ex-check {
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--line2);
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all .2s;
+  background: transparent;
+  color: transparent;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 0;
+}
+.ex-check.done {
+  background: var(--green);
+  border-color: var(--green);
+  color: #0f172a;
+}
+
+/* Fields */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 10px 0;
+}
+.field label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 550;
+}
+.field input, .field select {
+  width: 100%;
+  background: var(--bg2);
+  color: var(--text);
+  border: 1px solid var(--line2);
+  border-radius: 12px;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color .2s;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--green);
+}
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.actions button { flex: 1; min-width: 90px; }
+
+/* Water buttons */
+.water-btns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+}
+.water-btns button {
+  background: var(--panel2);
+  color: var(--text);
+  border: 1px solid var(--line2);
+  padding: 14px 8px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.water-btns button span {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* Notice */
+.notice {
+  border-left: 3px solid var(--blue);
+  padding: 10px 12px;
+  background: rgba(56,189,248,.06);
+  color: #cbd5e1;
+  border-radius: 0 10px 10px 0;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 12px 0;
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 13px;
+  padding: 8px 0;
+}
+
+/* Meal */
+.meal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+.meal:last-child { border-bottom: 0; }
+.meal button {
+  background: transparent;
+  color: var(--red);
+  padding: 4px 8px;
+  font-size: 12px;
+  border: none;
+}
+
+/* History */
+.recordline {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+.recordline:last-child { border: 0; }
+
+/* Greeting */
+.greeting {
+  font-size: 15px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.greeting strong { color: var(--text); }
+
+/* Bottom nav */
+.nav {
+  position: fixed;
+  z-index: 20;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+  background: rgba(10, 14, 23, 0.92);
+  border-top: 1px solid var(--line);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.nav button {
+  background: transparent;
+  color: var(--muted);
+  padding: 8px 6px;
+  flex: 1;
+  max-width: 80px;
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  border-radius: 12px;
+}
+.nav button svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.nav button.active {
+  background: var(--green-bg);
+  color: var(--green);
+}
+.nav button.active svg { stroke: var(--green); }
+
+/* Small helpers */
+.small { font-size: 11px; color: var(--muted); }
+.mb-8 { margin-bottom: 8px; }
+.mt-8 { margin-top: 8px; }
+.text-center { text-align: center; }
+
+/* IMC bar */
+.imc-bar {
+  height: 8px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #60a5fa, #a3e635 35%, #fbbf24 65%, #f87171);
+  margin: 10px 0 6px;
+  position: relative;
+}
+.imc-marker {
+  position: absolute;
+  top: -4px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border: 3px solid var(--green);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  transition: left .3s;
+}
+
+@media (min-width: 480px) {
+  .app { padding-top: 24px; }
+  .hero h2 { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="header">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6.5 6.5h11M6.5 17.5h11M4 9.5v5M20 9.5v5M2 12h2M20 12h2"/>
+        <rect x="6" y="9" width="3" height="6" rx="1"/>
+        <rect x="15" y="9" width="3" height="6" rx="1"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <h1>PROJETO DISCIPLINA</h1>
+      <p>Treino · Nutrição · Saúde · Constância</p>
+    </div>
+    <span class="pill" id="todayPill"></span>
+  </header>
+
+  <!-- HOME -->
+  <section id="home" class="screen active">
+    <div class="hero">
+      <div class="eyebrow">SEU PAINEL DIÁRIO</div>
+      <p class="greeting" id="homeGreeting">Olá!</p>
+      <h2>Pequenos hábitos.<br>Grandes resultados.</h2>
+      <p class="muted">Construa constância um dia de cada vez, sem precisar fazer tudo perfeitamente.</p>
+      <button onclick="show('workout')">Começar treino →</button>
+    </div>
+
+    <div class="grid three">
+      <div class="card stat">
+        <div class="icon-wrap green">🏋️</div>
+        <strong id="homeWorkout">0/5</strong>
+        <span>Exercícios</span>
+      </div>
+      <div class="card stat">
+        <div class="icon-wrap blue">💧</div>
+        <strong id="homeWater">0 ml</strong>
+        <span>Água</span>
+      </div>
+      <div class="card stat">
+        <div class="icon-wrap orange">🍽️</div>
+        <strong id="homeMeals">0</strong>
+        <span>Refeições</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <h3>Hábitos do dia</h3>
+        <span class="tag" id="habitCount">0/3</span>
+      </div>
+      <label class="item">
+        <input type="checkbox" data-habit="fruit">
+        <span class="grow"><strong>Comer frutas e vegetais</strong><small>Adicionar variedade às refeições</small></span>
+      </label>
+      <label class="item">
+        <input type="checkbox" data-habit="breaks">
+        <span class="grow"><strong>Fazer pausas</strong><small>Levantar e se movimentar durante o dia</small></span>
+      </label>
+      <label class="item">
+        <input type="checkbox" data-habit="sleepPrep">
+        <span class="grow"><strong>Preparar-se para dormir</strong><small>Diminuir o ritmo antes de deitar</small></span>
+      </label>
+    </div>
+
+    <div class="card">
+      <h3>Seus lembretes</h3>
+      <p class="muted mb-8">Configure horários na aba Perfil. Notificações funcionam enquanto o app estiver aberto.</p>
+      <div id="homeReminders" class="empty">Nenhum lembrete configurado.</div>
+    </div>
+  </section>
+
+  <!-- TREINO -->
+  <section id="workout" class="screen">
+    <h2>Treino de hoje</h2>
+    <p class="muted mb-8">5 exercícios · ~30 minutos. Faça no seu ritmo.</p>
+
+    <div class="card">
+      <div class="row">
+        <h3>Rotina diária</h3>
+        <span class="tag" id="workoutCount">0/5</span>
+      </div>
+      <div class="progress"><div id="workoutBar" style="width:0%"></div></div>
+      <div id="exerciseList"></div>
+      <button class="secondary wide mt-8" onclick="resetWorkout()">Desmarcar exercícios</button>
+    </div>
+    <div class="notice">Ajuste os exercícios à sua experiência e condição física. Descanso também faz parte do treino. Pare se sentir dor, tontura ou mal-estar.</div>
+  </section>
+
+  <!-- NUTRIÇÃO -->
+  <section id="nutrition" class="screen">
+    <h2>Nutrição</h2>
+    <p class="muted mb-8">Registre refeições e consulte estimativas. Não é necessário perseguir números exatos.</p>
+
+    <div class="card text-center">
+      <h3 style="margin-bottom:4px">Sua meta de proteína</h3>
+      <p class="small mb-8" id="proteinRefLabel">Referência informativa</p>
+      <div class="circle-wrap">
+        <svg viewBox="0 0 120 120">
+          <circle class="circle-bg" cx="60" cy="60" r="52"></circle>
+          <circle class="circle-fg" id="proteinCircle" cx="60" cy="60" r="52"
+            stroke-dasharray="326.7" stroke-dashoffset="326.7"></circle>
+        </svg>
+        <div class="circle-center">
+          <div>
+            <strong id="proteinVal">0g</strong>
+            <span id="proteinGoalLabel">/ 0g</span>
+          </div>
+        </div>
+      </div>
+      <div class="grid" style="margin-top:4px">
+        <div>
+          <strong id="kcalVal" style="font-size:18px">0</strong>
+          <span class="small" style="display:block">kcal registradas</span>
+        </div>
+        <div>
+          <strong id="proteinGrams" style="font-size:18px">0 g</strong>
+          <span class="small" style="display:block">proteína</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Adicionar refeição</h3>
+      <div class="field">
+        <label>Descrição</label>
+        <input id="mealName" placeholder="Ex: Almoço com frango e arroz">
+      </div>
+      <div class="grid">
+        <div class="field">
+          <label>Calorias (kcal)</label>
+          <input id="mealKcal" type="number" min="0" placeholder="400">
+        </div>
+        <div class="field">
+          <label>Proteína (g)</label>
+          <input id="mealProt" type="number" min="0" placeholder="30">
+        </div>
+      </div>
+      <button class="wide" onclick="addMeal()">Adicionar refeição</button>
+    </div>
+
+    <div class="card">
+      <div class="row"><h3>Refeições de hoje</h3><span class="tag" id="mealCount">0</span></div>
+      <div id="mealList" class="empty">Nenhuma refeição registrada.</div>
+    </div>
+
+    <div class="notice">A necessidade de proteína varia com idade, crescimento, saúde e atividade. Para adolescentes, use referências gerais com orientação de nutricionista.</div>
+  </section>
+
+  <!-- SAÚDE (água + IMC + sono) -->
+  <section id="health" class="screen">
+    <h2>Saúde e hidratação</h2>
+
+    <div class="card text-center">
+      <h3>💧 Água consumida</h3>
+      <div class="circle-wrap">
+        <svg viewBox="0 0 120 120">
+          <circle class="circle-bg" cx="60" cy="60" r="52"></circle>
+          <circle class="circle-fg" id="waterCircle" cx="60" cy="60" r="52"
+            stroke-dasharray="326.7" stroke-dashoffset="326.7"></circle>
+        </svg>
+        <div class="circle-center">
+          <div>
+            <strong id="waterVal">0 ml</strong>
+            <span id="waterPct">0% da meta</span>
+          </div>
+        </div>
+      </div>
+      <p class="small mb-8">Meta: <span id="waterGoalLabel">2000 ml</span></p>
+      <div class="water-btns">
+        <button onclick="addWater(200)">💧<span>+200 ml</span></button>
+        <button onclick="addWater(300)">💧<span>+300 ml</span></button>
+        <button onclick="addWater(500)">💧<span>+500 ml</span></button>
+      </div>
+      <div class="field">
+        <label>Meta de água (ml)</label>
+        <input id="waterGoalInput" type="number" min="500" step="100" value="2000">
+      </div>
+      <div class="actions">
+        <button class="secondary" onclick="setWaterGoal()">Salvar meta</button>
+        <button class="danger" onclick="resetWater()">Zerar registro</button>
+      </div>
+      <p class="small mt-8">A necessidade de água varia com clima, atividade e saúde.</p>
+    </div>
+
+    <div class="card">
+      <h3>Calculadora de IMC</h3>
+      <p class="muted mb-8">O IMC é apenas uma medida de triagem, não um diagnóstico.</p>
+      <div class="grid">
+        <div class="field">
+          <label>Peso (kg)</label>
+          <input id="imcWeight" type="number" min="20" step="0.1" placeholder="60">
+        </div>
+        <div class="field">
+          <label>Altura (cm)</label>
+          <input id="imcHeight" type="number" min="100" step="1" placeholder="165">
+        </div>
+      </div>
+      <button class="wide" onclick="calcIMC()">Calcular IMC</button>
+      <div id="imcResult" style="display:none;margin-top:14px">
+        <div class="text-center">
+          <strong id="imcValue" style="font-size:28px">—</strong>
+          <span class="tag" id="imcClass" style="display:block;margin-top:4px"></span>
+        </div>
+        <div class="imc-bar"><div class="imc-marker" id="imcMarker" style="left:50%"></div></div>
+        <div class="row" style="font-size:10px;color:var(--muted)">
+          <span>Abaixo</span><span>Adequado</span><span>Sobrepeso</span><span>Obesidade</span>
+        </div>
+      </div>
+      <div class="notice" style="margin-top:12px">Em crianças e adolescentes, a interpretação exige idade, sexo e curvas de crescimento. O app não classifica automaticamente menores de 20 anos.</div>
+    </div>
+
+    <div class="card">
+      <h3>🌙 Sono e descanso</h3>
+      <p class="muted mb-8">Adolescentes geralmente precisam de 8 a 10 horas de sono por noite.</p>
+      <div class="field">
+        <label>Horas dormidas</label>
+        <input id="sleepHours" type="number" min="0" max="16" step="0.5" placeholder="8">
+      </div>
+      <button class="wide" onclick="saveSleep()">Registrar sono</button>
+      <p class="small mt-8" id="sleepStatus">Nenhum registro de sono hoje.</p>
+      <div style="margin-top:14px">
+        <p class="small" style="margin-bottom:6px"><strong>Hábitos de descanso</strong></p>
+        <p class="small">• Manter horários regulares<br>• Diminuir luzes e telas antes de dormir<br>• Evitar cafeína à noite</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRESSO -->
+  <section id="progress" class="screen">
+    <h2>Progresso</h2>
+    <p class="muted mb-8">Resumo dos registros de hoje e histórico que você salvou.</p>
+
+    <div class="grid three">
+      <div class="card stat">
+        <div class="icon-wrap green">🏋️</div>
+        <strong id="progWorkout">0</strong>
+        <span>Exercícios</span>
+      </div>
+      <div class="card stat">
+        <div class="icon-wrap blue">💧</div>
+        <strong id="progWater">0</strong>
+        <span>Água</span>
+      </div>
+      <div class="card stat">
+        <div class="icon-wrap purple">🌙</div>
+        <strong id="progSleep">—</strong>
+        <span>Sono</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Resumo de hoje</h3>
+      <div id="todaySummary" class="empty">Nenhum registro ainda.</div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <h3>Histórico semanal</h3>
+      </div>
+      <div id="historyList" class="empty">Salve seu dia para criar o histórico.</div>
+      <button class="wide mt-8" onclick="saveDay()">Salvar dia no histórico</button>
+    </div>
+  </section>
+
+  <!-- PERFIL -->
+  <section id="profile" class="screen">
+    <h2>Perfil e configurações</h2>
+
+    <div class="card">
+      <h3>Preferências</h3>
+      <div class="field">
+        <label>Seu nome</label>
+        <input id="userName" placeholder="Como quer ser chamado?">
+      </div>
+      <div class="field">
+        <label>Peso atual (kg) — para referência de proteína</label>
+        <input id="userWeight" type="number" min="20" step="0.1" placeholder="60">
+      </div>
+      <button class="wide" onclick="saveProfile()">Salvar preferências</button>
+    </div>
+
+    <div class="card">
+      <h3>Lembretes</h3>
+      <p class="muted mb-8">Os lembretes do navegador funcionam enquanto o app estiver aberto.</p>
+      <div class="field">
+        <label>Água</label>
+        <input id="remWater" type="time">
+      </div>
+      <div class="field">
+        <label>Treino</label>
+        <input id="remWorkout" type="time">
+      </div>
+      <div class="field">
+        <label>Sono</label>
+        <input id="remSleep" type="time">
+      </div>
+      <div class="actions">
+        <button class="secondary" onclick="saveReminders()">Salvar lembretes</button>
+        <button onclick="askNotify()">Permitir notificações</button>
+      </div>
+      <p class="small mt-8" id="notificationStatus"></p>
+    </div>
+
+    <div class="card">
+      <h3>Dados</h3>
+      <p class="muted mb-8">Seus registros ficam neste navegador neste dispositivo.</p>
+      <button class="danger wide" onclick="clearAll()">Apagar todos os dados locais</button>
+    </div>
+
+    <div class="notice">Este app é uma ferramenta de organização e educação. Não substitui acompanhamento médico ou nutricional.</div>
+  </section>
+</div>
+
+<!-- Bottom Navigation -->
+<nav class="nav">
+  <button data-page="home" class="active">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5z"/></svg>
+    Início
+  </button>
+  <button data-page="workout">
+    <svg viewBox="0 0 24 24"><path d="M6.5 6.5h11M6.5 17.5h11M4 9.5v5M20 9.5v5M2 12h2M20 12h2"/><rect x="6" y="9" width="3" height="6" rx="1"/><rect x="15" y="9" width="3" height="6" rx="1"/></svg>
+    Treino
+  </button>
+  <button data-page="nutrition">
+    <svg viewBox="0 0 24 24"><path d="M4 12h16M12 4v16M8 8h8M8 16h8"/></svg>
+    Nutrição
+  </button>
+  <button data-page="health">
+    <svg viewBox="0 0 24 24"><path d="M20.8 8.6a5.1 5.1 0 0 0-7.8-1L12 8.5l-1-1a5.1 5.1 0 0 0-7.8 1 5.4 5.4 0 0 0 .4 6.8L12 21l8.4-5.6a5.4 5.4 0 0 0 .4-6.8z"/></svg>
+    Saúde
+  </button>
+  <button data-page="progress">
+    <svg viewBox="0 0 24 24"><path d="M4 19V5M10 19V9M16 19v-6M22 19V7"/></svg>
+    Progresso
+  </button>
+  <button data-page="profile">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    Perfil
+  </button>
+</nav>
+
+<script>
+const EXERCISES = [
+  ['Aquecimento', '5 minutos', 10, '🔥'],
+  ['Agachamentos', '3 séries · 12 repetições', 20, '🦵'],
+  ['Flexões (adaptadas)', '3 séries · 8 a 12 repetições', 20, '💪'],
+  ['Caminhada', '15 minutos', 20, '🚶'],
+  ['Alongamento', '5 minutos', 10, '🧘']
+];
+const CIRC = 2 * Math.PI * 52; // ~326.7
+const today = new Date().toLocaleDateString('en-CA');
+const KEY = 'projetoDisciplina_v1';
+let data = load();
+
+function fresh() {
+  return {
+    date: today,
+    workout: [],
+    water: 0,
+    waterGoal: 2000,
+    food: [],
+    sleep: null,
+    habits: { fruit: false, breaks: false, sleepPrep: false },
+    history: [],
+    reminders: { water: '10:00', workout: '17:00', sleep: '21:30' },
+    name: '',
+    weight: 60
+  };
+}
+
+function load() {
+  try {
+    let d = JSON.parse(localStorage.getItem(KEY));
+    if (!d) return fresh();
+    if (d.date !== today) {
+      d.history = d.history || [];
+      d.history.unshift({
+        date: d.date,
+        workout: (d.workout || []).length,
+        water: d.water || 0,
+        meals: (d.food || []).length,
+        sleep: d.sleep
+      });
+      d.history = d.history.slice(0, 7);
+      d.date = today;
+      d.workout = [];
+      d.water = 0;
+      d.food = [];
+      d.sleep = null;
+      d.habits = { fruit: false, breaks: false, sleepPrep: false };
+    }
+    return Object.assign(fresh(), d);
+  } catch (e) {
+    return fresh();
+  }
+}
+
+function save() {
+  localStorage.setItem(KEY, JSON.stringify(data));
+  render();
+}
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('active', b.dataset.page === id));
+  if (id === 'health') {
+    const sh = document.getElementById('sleepHours');
+    if (sh) sh.value = data.sleep ?? 8;
+  }
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.querySelectorAll('.nav button').forEach(b => {
+  b.addEventListener('click', () => show(b.dataset.page));
+});
+
+document.querySelectorAll('[data-habit]').forEach(el => {
+  el.addEventListener('change', () => {
+    data.habits[el.dataset.habit] = el.checked;
+    save();
+  });
+});
+
+function setCircle(el, pct) {
+  if (!el) return;
+  const p = Math.max(0, Math.min(1, pct));
+  el.style.strokeDasharray = CIRC;
+  el.style.strokeDashoffset = CIRC * (1 - p);
+}
+
+function render() {
+  // Header date
+  document.getElementById('todayPill').textContent = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+
+  // Greeting
+  const greet = document.getElementById('homeGreeting');
+  if (data.name) {
+    greet.innerHTML = `Hoje é um bom dia, <strong>${esc(data.name)}</strong>!`;
+  } else {
+    greet.textContent = 'Olá! Configure seu nome no Perfil.';
+  }
+
+  // Home stats
+  document.getElementById('homeWorkout').textContent = `${data.workout.length}/${EXERCISES.length}`;
+  document.getElementById('homeWater').textContent = data.water >= 1000 ? (data.water / 1000).toFixed(2) + ' L' : data.water + ' ml';
+  document.getElementById('homeMeals').textContent = data.food.length;
+
+  // Habits
+  const habitKeys = ['fruit', 'breaks', 'sleepPrep'];
+  let habitDone = 0;
+  habitKeys.forEach(k => {
+    const el = document.querySelector(`[data-habit="${k}"]`);
+    if (el) {
+      el.checked = !!data.habits[k];
+      if (data.habits[k]) habitDone++;
+    }
+  });
+  document.getElementById('habitCount').textContent = `${habitDone}/3`;
+
+  // Reminders preview
+  const remBox = document.getElementById('homeReminders');
+  const rems = [];
+  if (data.reminders.water) rems.push(`💧 Água: ${data.reminders.water}`);
+  if (data.reminders.workout) rems.push(`🏋️ Treino: ${data.reminders.workout}`);
+  if (data.reminders.sleep) rems.push(`🌙 Sono: ${data.reminders.sleep}`);
+  remBox.innerHTML = rems.length ? rems.map(r => `<div class="small" style="padding:4px 0">${r}</div>`).join('') : 'Nenhum lembrete configurado.';
+
+  // Workout
+  document.getElementById('workoutCount').textContent = `${data.workout.length}/${EXERCISES.length}`;
+  document.getElementById('workoutBar').style.width = `${(data.workout.length / EXERCISES.length) * 100}%`;
+  const list = document.getElementById('exerciseList');
+  list.innerHTML = EXERCISES.map((ex, i) => {
+    const done = data.workout.includes(i);
+    return `<div class="ex-item">
+      <div class="ex-icon">${ex[3]}</div>
+      <div class="grow"><strong>${ex[0]}</strong><small>${ex[1]}</small></div>
+      <button class="ex-check ${done ? 'done' : ''}" onclick="toggleEx(${i})">${done ? '✓' : ''}</button>
+    </div>`;
+  }).join('');
+
+  // Nutrition
+  const totalKcal = data.food.reduce((s, m) => s + (m.kcal || 0), 0);
+  const totalProt = data.food.reduce((s, m) => s + (m.prot || 0), 0);
+  const protGoal = Math.round((data.weight || 60) * 0.85);
+  document.getElementById('kcalVal').textContent = totalKcal;
+  document.getElementById('proteinGrams').textContent = totalProt + ' g';
+  document.getElementById('proteinVal').textContent = totalProt + 'g';
+  document.getElementById('proteinGoalLabel').textContent = `/ ${protGoal}g`;
+  document.getElementById('proteinRefLabel').textContent = `${data.weight || 60} kg · ~0,85 g/kg`;
+  setCircle(document.getElementById('proteinCircle'), totalProt / protGoal);
+  document.getElementById('mealCount').textContent = data.food.length;
+  const mealList = document.getElementById('mealList');
+  if (!data.food.length) {
+    mealList.className = 'empty';
+    mealList.textContent = 'Nenhuma refeição registrada.';
+  } else {
+    mealList.className = '';
+    mealList.innerHTML = data.food.map((m, i) =>
+      `<div class="meal"><span><strong>${esc(m.name)}</strong><br><span class="small">${m.kcal || 0} kcal · ${m.prot || 0} g prot</span></span>
+       <button onclick="removeMeal(${i})">Remover</button></div>`
+    ).join('');
+  }
+
+  // Water
+  const wPct = data.water / (data.waterGoal || 2000);
+  const wLabel = data.water >= 1000 ? (data.water / 1000).toFixed(2) + ' L' : data.water + ' ml';
+  document.getElementById('waterVal').textContent = wLabel;
+  document.getElementById('waterPct').textContent = Math.round(wPct * 100) + '% da meta';
+  document.getElementById('waterGoalLabel').textContent = data.waterGoal + ' ml';
+  setCircle(document.getElementById('waterCircle'), wPct);
+  const wgi = document.getElementById('waterGoalInput');
+  if (wgi && document.activeElement !== wgi) wgi.value = data.waterGoal;
+
+  // Sleep
+  const ss = document.getElementById('sleepStatus');
+  if (ss) ss.textContent = data.sleep != null ? `Registrado: ${data.sleep} h` : 'Nenhum registro de sono hoje.';
+
+  // Progress
+  document.getElementById('progWorkout').textContent = data.workout.length + '/' + EXERCISES.length;
+  document.getElementById('progWater').textContent = data.water >= 1000 ? (data.water / 1000).toFixed(1) + 'L' : data.water + 'ml';
+  document.getElementById('progSleep').textContent = data.sleep != null ? data.sleep + 'h' : '—';
+
+  const summary = [];
+  if (data.workout.length) summary.push(`🏋️ ${data.workout.length} exercícios`);
+  if (data.water) summary.push(`💧 ${data.water} ml de água`);
+  if (data.food.length) summary.push(`🍽️ ${data.food.length} refeições (${totalKcal} kcal)`);
+  if (data.sleep != null) summary.push(`🌙 ${data.sleep} h de sono`);
+  const ts = document.getElementById('todaySummary');
+  ts.className = summary.length ? '' : 'empty';
+  ts.innerHTML = summary.length ? summary.map(s => `<div style="padding:6px 0">${s}</div>`).join('') : 'Nenhum registro ainda.';
+
+  const hl = document.getElementById('historyList');
+  if (!data.history.length) {
+    hl.className = 'empty';
+    hl.textContent = 'Salve seu dia para criar o histórico.';
+  } else {
+    hl.className = '';
+    hl.innerHTML = data.history.map(h =>
+      `<div class="recordline"><span>${h.date}</span><span class="small">${h.workout || 0} ex · ${h.water || 0} ml · ${h.meals || 0} ref · ${h.sleep != null ? h.sleep + 'h' : '—'}</span></div>`
+    ).join('');
+  }
+
+  // Profile fields
+  const un = document.getElementById('userName');
+  const uw = document.getElementById('userWeight');
+  if (un && document.activeElement !== un) un.value = data.name || '';
+  if (uw && document.activeElement !== uw) uw.value = data.weight || 60;
+
+  const rw = document.getElementById('remWater');
+  const rwo = document.getElementById('remWorkout');
+  const rs = document.getElementById('remSleep');
+  if (rw && document.activeElement !== rw) rw.value = data.reminders.water || '';
+  if (rwo && document.activeElement !== rwo) rwo.value = data.reminders.workout || '';
+  if (rs && document.activeElement !== rs) rs.value = data.reminders.sleep || '';
+}
+
+function toggleEx(i) {
+  const idx = data.workout.indexOf(i);
+  if (idx >= 0) data.workout.splice(idx, 1);
+  else data.workout.push(i);
+  data.workout.sort((a, b) => a - b);
+  save();
+}
+
+function resetWorkout() {
+  data.workout = [];
+  save();
+}
+
+function addWater(ml) {
+  data.water = (data.water || 0) + ml;
+  save();
+}
+
+function resetWater() {
+  if (confirm('Zerar o registro de água de hoje?')) {
+    data.water = 0;
+    save();
+  }
+}
+
+function setWaterGoal() {
+  const v = parseInt(document.getElementById('waterGoalInput').value, 10);
+  if (v >= 500) {
+    data.waterGoal = v;
+    save();
+  }
+}
+
+function addMeal() {
+  const name = document.getElementById('mealName').value.trim();
+  const kcal = parseInt(document.getElementById('mealKcal').value, 10) || 0;
+  const prot = parseInt(document.getElementById('mealProt').value, 10) || 0;
+  if (!name) {
+    alert('Digite uma descrição para a refeição.');
+    return;
+  }
+  data.food.push({ name, kcal, prot });
+  document.getElementById('mealName').value = '';
+  document.getElementById('mealKcal').value = '';
+  document.getElementById('mealProt').value = '';
+  save();
+}
+
+function removeMeal(i) {
+  data.food.splice(i, 1);
+  save();
+}
+
+function calcIMC() {
+  const w = parseFloat(document.getElementById('imcWeight').value);
+  const h = parseFloat(document.getElementById('imcHeight').value);
+  if (!w || !h || h < 50) return;
+  const imc = w / ((h / 100) ** 2);
+  const box = document.getElementById('imcResult');
+  box.style.display = 'block';
+  document.getElementById('imcValue').textContent = imc.toFixed(1);
+  let cls = '', left = 50;
+  if (imc < 18.5) { cls = 'Abaixo do peso'; left = 12; }
+  else if (imc < 25) { cls = 'Peso adequado'; left = 38; }
+  else if (imc < 30) { cls = 'Sobrepeso'; left = 62; }
+  else { cls = 'Obesidade'; left = 88; }
+  document.getElementById('imcClass').textContent = cls;
+  document.getElementById('imcMarker').style.left = left + '%';
+}
+
+function saveSleep() {
+  const v = parseFloat(document.getElementById('sleepHours').value);
+  if (isNaN(v) || v < 0) return;
+  data.sleep = v;
+  save();
+}
+
+function saveDay() {
+  data.history = data.history || [];
+  data.history.unshift({
+    date: today,
+    workout: data.workout.length,
+    water: data.water,
+    meals: data.food.length,
+    sleep: data.sleep
+  });
+  data.history = data.history.slice(0, 7);
+  save();
+  alert('Dia salvo no histórico!');
+}
+
+function saveProfile() {
+  data.name = document.getElementById('userName').value.trim();
+  const w = parseFloat(document.getElementById('userWeight').value);
+  if (w > 0) data.weight = w;
+  save();
+  alert('Preferências salvas!');
+}
+
+function saveReminders() {
+  data.reminders.water = document.getElementById('remWater').value;
+  data.reminders.workout = document.getElementById('remWorkout').value;
+  data.reminders.sleep = document.getElementById('remSleep').value;
+  save();
+  scheduleReminders();
+  alert('Lembretes salvos!');
+}
+
+async function askNotify() {
+  if (!('Notification' in window)) {
+    document.getElementById('notificationStatus').textContent = 'Este navegador não oferece notificações.';
+    return;
+  }
+  let p = await Notification.requestPermission();
+  document.getElementById('notificationStatus').textContent =
+    p === 'granted'
+      ? 'Notificações permitidas. Mantenha o app aberto para lembretes programados.'
+      : 'Permissão não concedida.';
+  if (p === 'granted') {
+    new Notification('Projeto Disciplina', { body: 'Notificações ativadas para seus lembretes.' });
+    scheduleReminders();
+  }
+}
+
+let lastReminder = {};
+function scheduleReminders() {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  clearInterval(window.reminderTimer);
+  window.reminderTimer = setInterval(() => {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    for (const [key, label] of [
+      ['water', 'Hora de beber água'],
+      ['workout', 'Hora planejada para o treino'],
+      ['sleep', 'Hora de desacelerar e se preparar para dormir']
+    ]) {
+      if (data.reminders[key] === hh && lastReminder[key] !== today + hh) {
+        new Notification('Projeto Disciplina', { body: label });
+        lastReminder[key] = today + hh;
+      }
+    }
+  }, 30000);
+}
+
+function clearAll() {
+  if (confirm('Apagar todos os registros deste app neste dispositivo?')) {
+    localStorage.removeItem(KEY);
+    data = fresh();
+    save();
+    show('home');
+  }
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+render();
+scheduleReminders();
+</script>
+</body>
+</html>
